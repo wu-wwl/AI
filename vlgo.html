@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的Vlog日记 | 生活记录者</title>
+    <link href="https://cdn.plyr.io/3.7.8/plyr.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui;
+        }
+
+        body {
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* 视频播放器 */
+        .video-container {
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        /* 视频信息 */
+        .video-info {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .video-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-description {
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* 视频列表 */
+        .video-list {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-info {
+            padding: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-date {
+            color: #888;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 主播放器 -->
+        <div class="video-container">
+            <video id="player" playsinline controls>
+                <source src="vlogs/vlog1.mp4" type="video/mp4">
+                <!-- 备用源 -->
+                <source src="vlogs/vlog1.webm" type="video/webm">
+            </video>
+        </div>
+
+        <!-- 视频信息 -->
+        <div class="video-info">
+            <h1 class="video-title">春日野餐日记</h1>
+            <div class="video-meta">
+                <span>2023年3月20日</span> · 
+                <span>12:34 分钟</span> · 
+                <span>4K 画质</span>
+            </div>
+            <p class="video-description">
+                记录与好友在樱花树下的春日野餐，包含美食制作过程、趣味游戏环节和意外彩蛋！
+            </p>
+        </div>
+
+        <!-- 视频列表 -->
+        <h2>更多作品</h2>
+        <div class="video-list" id="videoList"></div>
+    </div>
+
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script>
+        // 初始化播放器
+        const player = new Plyr('#player', {
+            settings: ['quality', 'speed'],
+            keyboard: { focused: true, global: true }
+        });
+
+        // 视频数据
+        const vlogData = [
+            {
+                title: "咖啡店探店日记",
+                date: "2023-03-15",
+                duration: "08:45",
+                thumb: "imgs/1.jpg",
+                src: "play/mv/1.mp4"
+            },
+            {
+                title: "周末手作时光",
+                date: "2023-03-10",
+                duration: "15:20",
+                thumb: "thumbs/craft.jpg",
+                src: "vlogs/vlog3.mp4"
+            },
+            {
+                title: "晨跑vlog",
+                date: "2023-03-05",
+                duration: "06:12",
+                thumb: "thumbs/morning.jpg",
+                src: "vlogs/vlog4.mp4"
+            }
+        ];
+
+        // 生成视频列表
+        function renderVideoList() {
+            const container = document.getElementById('videoList');
+            container.innerHTML = vlogData.map(video => `
+                <div class="video-card" onclick="changeVideo('${video.src}')">
+                    <img src="${video.thumb}" class="thumbnail" alt="${video.title}">
+                    <div class="card-info">
+                        <h3 class="card-title">${video.title}</h3>
+                        <div class="card-date">
+                            ${video.date} · ${video.duration}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 切换视频
+        function changeVideo(src) {
+            player.source = {
+                type: 'video',
+                sources: [
+                    {
+                        src: src,
+                        type: 'video/mp4'
+                    }
+                ]
+            };
+        }
+
+        // 初始化
+        renderVideoList();
+    </script>
+</body>
+</html>
